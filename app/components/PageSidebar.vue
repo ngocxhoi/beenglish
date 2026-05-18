@@ -31,7 +31,7 @@
               :to="item.to"
               :class="[
                 'group flex items-center gap-3 px-3 py-2 text-sm transition-colors border-l-2',
-                item?.active
+                route.path === item.to
                   ? 'border-foreground text-foreground font-medium bg-muted'
                   : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/60'
               ]"
@@ -82,4 +82,6 @@
 
 <script lang="ts" setup>
 import { groups } from '#shared/data'
+
+const route = useRoute()
 </script>

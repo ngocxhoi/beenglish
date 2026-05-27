@@ -9,12 +9,15 @@
         }"
       />
       <div class="absolute inset-0 grid place-items-center">
-        <div class="w-12 h-12 border border-foreground bg-background grid place-items-center group-hover:bg-foreground group-hover:text-background transition">
+        <NuxtLink
+          :to="`/vi/dictation/${toSlug(v.title)}`"
+          class="w-12 h-12 border border-foreground bg-background grid place-items-center group-hover:bg-foreground group-hover:text-background transition"
+        >
           <Icon
             name="lucide:play"
             class="w-4 h-4 fill-current"
           />
-        </div>
+        </NuxtLink>
       </div>
       <span class="absolute top-2 left-2 font-mono text-[10px] font-bold px-1.5 py-0.5 bg-foreground text-background">
         {{ v.level }}
@@ -37,7 +40,10 @@
         <span class="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
           {{ v.progress ?? 0 }}% hoàn thành
         </span>
-        <ArrowUpRight class="w-3.5 h-3.5 opacity-50 group-hover:opacity-100" />
+        <Icon
+          name="lucide:arrow-up-right"
+          class="w-3.5 h-3.5 opacity-50 group-hover:opacity-100"
+        />
       </div>
       <div class="mt-2 h-px bg-border relative">
         <div

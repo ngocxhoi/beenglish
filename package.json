@@ -13,14 +13,20 @@
   "dependencies": {
     "@iconify-json/lucide": "^1.2.106",
     "@iconify-json/simple-icons": "^1.2.81",
+    "@neondatabase/serverless": "^1.1.0",
     "@nuxt/ui": "^4.7.1",
+    "dotenv": "^17.4.2",
+    "drizzle-orm": "^0.45.2",
     "nuxt": "^4.4.5",
     "nuxt-charts": "^2.1.4",
     "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.15.2",
+    "@types/node": "^25.9.1",
+    "drizzle-kit": "^0.31.10",
     "eslint": "^10.3.0",
+    "tsx": "^4.22.3",
     "typescript": "^6.0.3",
     "vue-tsc": "^3.2.8"
   },

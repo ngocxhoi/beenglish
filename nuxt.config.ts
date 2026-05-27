@@ -3,10 +3,14 @@ export default defineNuxtConfig({
   modules: ['@nuxt/eslint', '@nuxt/ui', 'nuxt-charts'],
 
   devtools: {
-    enabled: false
+    enabled: true
   },
 
   css: ['~/assets/css/main.css'],
+
+  runtimeConfig: {
+    DATABASE_URL: process.env.DATABASE_URL
+  },
 
   routeRules: {
     '/': { prerender: true }

@@ -31,7 +31,7 @@
               :to="item.to"
               :class="[
                 'group flex items-center gap-3 px-3 py-2 text-sm transition-colors border-l-2',
-                route.path === item.to
+                route.path.startsWith(item.to)
                   ? 'border-foreground text-foreground font-medium bg-muted'
                   : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/60'
               ]"

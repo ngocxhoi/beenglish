@@ -2,13 +2,20 @@
 const today = new Date().toLocaleDateString('vi-VN', {
   weekday: 'long', day: '2-digit', month: 'long', year: 'numeric'
 })
+
+const route = useRoute()
+
+const isHomePage = computed(() => route.path === '/vi/trang-chu')
 </script>
 
 <template>
   <div class="fixed inset-0 flex flex-1">
     <PageSidebar />
     <main class="flex-1 min-w-0 relative">
-      <header class="sticky top-0 left-0 right-0 bg-transparent backdrop-blur-2xl h-20 px-6 lg:px-10 flex items-center justify-between border-b border-border">
+      <header
+        v-if="isHomePage"
+        class="sticky top-0 left-0 right-0 bg-transparent backdrop-blur-2xl h-20 px-6 lg:px-10 flex items-center justify-between border-b border-border"
+      >
         <div class="flex items-center gap-4">
           <p class="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
             {{ today }}
@@ -31,7 +38,10 @@ const today = new Date().toLocaleDateString('vi-VN', {
         </div>
       </header>
 
-      <div class="relative w-full h-[calc(100vh-5rem)] overflow-y-auto">
+      <div
+        class="relative w-full"
+        :class="{ 'h-[calc(100vh-5rem)]': isHomePage }"
+      >
         <slot />
       </div>
     </main>

@@ -36,7 +36,10 @@
         <!-- {/* Search + level */} -->
         <div class="flex flex-col sm:flex-row gap-3">
           <div class="relative flex-1">
-            <Search class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Icon
+              name="lucide:search"
+              class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            />
             <input
               v-model="query"
               placeholder="Tìm theo tiêu đề..."

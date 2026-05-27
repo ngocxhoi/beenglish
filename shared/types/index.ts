@@ -29,3 +29,10 @@ export type Video = {
   minutes: number
   progress?: number
 }
+
+export type Sentence = {
+  index: number
+  start: number | string
+  end: number | string
+  text: string
+}

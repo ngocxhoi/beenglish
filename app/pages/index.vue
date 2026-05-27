@@ -162,7 +162,7 @@
 </template>
 
 <script setup>
-import heroAbstract from '~/assets/video-1.jpg'
+import heroAbstract from '~/assets/video-3.jpg'
 
 const features = [
   { n: '01', title: 'Dictation', desc: 'Ghi chép chính tả từ kho video thực tế. Sửa lỗi tức thì và nâng cấp vốn từ vựng chuyên sâu.', active: true },

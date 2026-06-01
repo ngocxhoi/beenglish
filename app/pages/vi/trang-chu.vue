@@ -59,9 +59,8 @@
 </template>
 
 <script setup lang='ts'>
-
+definePageMeta({
+  middleware: ['auth'],
+  auth: true
+})
 </script>
-
-<style>
-
-</style>

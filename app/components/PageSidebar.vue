@@ -62,26 +62,75 @@
           Mở khoá toàn bộ
         </p>
       </button>
-      <div class="flex items-center gap-3 px-2">
-        <div class="w-9 h-9 rounded-full bg-foreground text-background grid place-items-center text-xs font-bold">
-          HN
+      <UDropdownMenu
+        :items="items"
+        :content="{
+          align: 'start',
+          side: 'right',
+          sideOffset: 8
+        }"
+        :ui="{
+          content: 'w-48'
+        }"
+      >
+        <div class="flex items-center gap-3 px-2 cursor-pointer">
+          <div class="w-9 h-9 rounded-full bg-foreground text-background grid place-items-center text-xs font-bold">
+            HN
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium truncate">
+              Hội Ngọc
+            </p>
+            <p class="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+              Free tier
+            </p>
+          </div>
+          <ColorMode />
         </div>
-        <div class="flex-1 min-w-0">
-          <p class="text-sm font-medium truncate">
-            Hội Ngọc
-          </p>
-          <p class="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-            Free tier
-          </p>
-        </div>
-        <ColorMode />
-      </div>
+      </UDropdownMenu>
     </div>
   </aside>
 </template>
 
 <script lang="ts" setup>
 import { groups } from '#shared/data'
+import type { DropdownMenuItem } from '@nuxt/ui'
 
 const route = useRoute()
+const user = useAuth()
+
+const items = ref<DropdownMenuItem[]>([
+  {
+    label: 'Settings',
+    icon: 'i-lucide-cog'
+  },
+  {
+    label: 'Billing',
+    icon: 'i-lucide-credit-card'
+  },
+  {
+    label: 'Logout',
+    icon: 'i-lucide-log-out',
+    color: 'error',
+    async onSelect(e: Event) {
+      // TODO: implement logout
+      await handleLogout(e)
+    }
+  }
+])
+
+async function handleLogout(e: Event) {
+  e.preventDefault()
+  // TODO: implement logout
+  user.value = null
+  await $fetch('/api/auth/logout', {
+    method: 'POST'
+  })
+  await navigateTo({
+    path: '/vi/auth/login',
+    query: {
+      redirect: route.fullPath
+    }
+  })
+}
 </script>

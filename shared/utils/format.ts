@@ -31,4 +31,9 @@ function compare(input: string, target: string) {
   }
 }
 
-export { fmt, norm, toSlug, compare }
+function handleMessageError(error: string) {
+  const parts = error.split(':')
+  return parts[1]?.trim() || error
+}
+
+export { fmt, norm, toSlug, compare, handleMessageError }

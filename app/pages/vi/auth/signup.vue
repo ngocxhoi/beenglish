@@ -86,6 +86,15 @@
 </template>
 
 <script lang="ts" setup>
+import type { FormSubmitEvent } from '@nuxt/ui'
+import { schemaSignup, type SchemaSignup } from '#shared/utils/zod'
+import { handleMessageError } from '~~/shared/utils/format'
+
+definePageMeta({
+  middleware: ['auth'],
+  guest: true
+})
+
 const credential = reactive<Partial<SchemaSignup>>({
   email: undefined,
   password: undefined,
@@ -96,17 +105,31 @@ const loading = ref(false)
 const toast = useToast()
 
 const handleSubmit = async (event: FormSubmitEvent<SchemaSignup>) => {
-  loading.value = true
-  await sleep(4000)
-  // TODO: implement login logic
-  console.log(event.data)
-  loading.value = false
-  toast.add({
-    title: 'Đăng ký thành công',
-    description: 'Bạn đã đăng ký thành công',
-    color: 'success'
-  })
-  // navigateTo('/vi/trang-chu')
+  try {
+    loading.value = true
+    // TODO: implement login logic
+    const data = await $fetch('/api/auth/register', {
+      method: 'POST',
+      body: event.data
+    })
+
+    console.log(data)
+    toast.add({
+      title: 'Đăng ký thành công',
+      description: 'Bạn đã đăng ký thành công',
+      color: 'success'
+    })
+    navigateTo('/vi/auth/login')
+  } catch (error) {
+    console.error(error)
+    toast.add({
+      title: 'Đăng ký thất bại',
+      description: handleMessageError((error as Error).message),
+      color: 'error'
+    })
+  } finally {
+    loading.value = false
+  }
 }
 
 const handleGoogle = async () => {

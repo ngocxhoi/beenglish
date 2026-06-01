@@ -74,6 +74,15 @@
 </template>
 
 <script lang="ts" setup>
+import type { FormSubmitEvent } from '@nuxt/ui'
+import { schemaLogin, type SchemaLogin } from '#shared/utils/zod'
+import { handleMessageError } from '~~/shared/utils/format'
+
+definePageMeta({
+  middleware: ['auth'],
+  guest: true
+})
+
 const credential = reactive<Partial<SchemaLogin>>({
   email: undefined,
   password: undefined
@@ -81,19 +90,39 @@ const credential = reactive<Partial<SchemaLogin>>({
 const loading = ref(false)
 
 const toast = useToast()
+const user = useAuth()
+const route = useRoute()
 
 const handleSubmit = async (event: FormSubmitEvent<SchemaLogin>) => {
-  loading.value = true
-  await sleep(4000)
-  // TODO: implement login logic
-  console.log(event.data)
-  loading.value = false
-  toast.add({
-    title: 'Đăng nhập thành công',
-    description: 'Bạn đã đăng nhập thành công',
-    color: 'success'
-  })
-  // navigateTo('/vi/trang-chu')
+  try {
+    loading.value = true
+    // TODO: implement login logic
+    const response = await $fetch('/api/auth/login', {
+      method: 'POST',
+      body: event.data
+    })
+
+    user.value = response
+
+    toast.add({
+      title: 'Đăng nhập thành công',
+      description: 'Bạn đã đăng nhập thành công',
+      color: 'success'
+    })
+
+    await navigateTo({
+      path: route.query.redirect as string || '/vi/trang-chu'
+    })
+  } catch (error) {
+    console.error(error)
+    toast.add({
+      title: 'Đăng nhập thất bại',
+      description: handleMessageError((error as Error).message),
+      color: 'error'
+    })
+  } finally {
+    loading.value = false
+  }
 }
 
 const handleGoogle = async () => {

@@ -17,6 +17,10 @@
 <script lang="ts" setup>
 import { TOPICS, makeVideos } from '#shared/data'
 
+definePageMeta({
+  middleware: ['auth'],
+  auth: true
+})
 useSeoMeta({
   title: 'Dictation'
 })

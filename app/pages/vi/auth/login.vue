@@ -107,6 +107,7 @@ const handleSubmit = async (event: FormSubmitEvent<SchemaLogin>) => {
     toast.add({
       title: 'Đăng nhập thành công',
       description: 'Bạn đã đăng nhập thành công',
+      icon: 'lucide:circle-check',
       color: 'success'
     })
 
@@ -118,6 +119,7 @@ const handleSubmit = async (event: FormSubmitEvent<SchemaLogin>) => {
     toast.add({
       title: 'Đăng nhập thất bại',
       description: handleMessageError((error as Error).message),
+      icon: 'lucide:octagon-x',
       color: 'error'
     })
   } finally {
@@ -133,6 +135,7 @@ const handleGoogle = async () => {
   toast.add({
     title: 'Đăng nhập thành công',
     description: 'Bạn đã đăng nhập thành công',
+    icon: 'lucide:circle-check',
     color: 'success'
   })
   navigateTo('/vi/trang-chu')

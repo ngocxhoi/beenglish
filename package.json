@@ -13,7 +13,10 @@
   "dependencies": {
     "@iconify-json/lucide": "^1.2.106",
     "@iconify-json/simple-icons": "^1.2.81",
+    "@imagekit/nodejs": "^7.6.3",
+    "@imagekit/vue": "^4.0.1",
     "@neondatabase/serverless": "^1.1.0",
+    "@nuxt/image": "2.0.0",
     "@nuxt/ui": "^4.7.1",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.4.2",

@@ -1,6 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@nuxt/eslint', '@nuxt/ui', 'nuxt-charts'],
+  modules: [
+    '@nuxt/eslint',
+    '@nuxt/ui',
+    'nuxt-charts',
+    '@nuxt/image'
+  ],
 
   devtools: {
     enabled: false
@@ -10,7 +15,12 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     DATABASE_URL: process.env.DATABASE_URL,
-    JWT_SECRET: process.env.JWT_SECRET
+    JWT_SECRET: process.env.JWT_SECRET,
+    IMAGEKIT_PRIVATE_KEY: process.env.IMAGEKIT_PRIVATE_KEY,
+    public: {
+      IMAGEKIT_PUBLIC_KEY: process.env.IMAGEKIT_PUBLIC_KEY,
+      IMAGEKIT_URL_ENDPOINT: process.env.IMAGEKIT_URL_ENDPOINT
+    }
   },
 
   routeRules: {
@@ -25,6 +35,12 @@ export default defineNuxtConfig({
         commaDangle: 'never',
         braceStyle: '1tbs'
       }
+    }
+  },
+
+  image: {
+    imagekit: {
+      baseURL: 'https://ik.imagekit.io/22010186'
     }
   }
 })

@@ -42,13 +42,13 @@ export default defineEventHandler(async (event) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 60 * 60 * 1
+      maxAge: 60 * 60 * 24 * 7
     })
 
     return {
       id: user.id,
       email: user.email,
-      exp: Date.now() + 60 * 60 * 1
+      exp: Date.now() + 60 * 60 * 24 * 7
     }
   } catch (error) {
     throw createError({

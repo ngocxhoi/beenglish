@@ -35,6 +35,7 @@ export default defineEventHandler(async (event) => {
 
     await db.insert(users).values({
       email: data.email,
+      name: data.email.split('@')[0],
       passwordHash: hashedPassword
     })
 

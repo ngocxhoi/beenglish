@@ -31,9 +31,9 @@
               <UTooltip text="Benjamin Canac">
                 <UAvatar
                   provider="imagekit"
-                  src="/image/572271604_17881803291408342_7662276147923267962_n_2SCpy3w4c.jpg"
-                  :alt="initials || 'Benjamin Canac'"
-                  size="xl"
+                  :src="user?.profile"
+                  :alt="user?.name || formatUserEmail(user!.email)?.slice(0, 2)"
+                  size="3xl"
                   loading="lazy"
                 />
               </UTooltip>
@@ -56,26 +56,14 @@
                     id="display_name"
                     v-model="displayName"
                     :maxlength="80"
-                    class="w-full [&_input]:w-full"
+                    class="w-full [&_input]:w-full capitalize"
                   />
                 </UFormField>
               </div>
               <div class="space-y-2">
                 <UFormField label="URL ảnh đại diện">
-                  <UFileUpload
-                    v-model="file"
-                    color="neutral"
-                    highlight
-                    label="Drop your image here"
-                    description="SVG, PNG, JPG or GIF (max. 2MB)"
-                    class="w-96 min-h-48"
-                    accept="image/*"
-                  />
+                  <SettingProfileUpload ref="profileUploadRef" />
                 </UFormField>
-                <UProgress
-                  v-if="progress > 0"
-                  v-model="progress"
-                />
               </div>
             </div>
 
@@ -154,31 +142,54 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  upload,
-  ImageKitAbortError,
-  ImageKitInvalidRequestError,
-  ImageKitUploadNetworkError,
-  ImageKitServerError
-} from '@imagekit/vue'
-
 definePageMeta({
   middleware: 'auth',
   auth: true
 })
+
 const toast = useToast()
 const user = useAuth()
 
-const file = ref<File | null>(null)
 const displayName = ref('')
 const newPassword = ref('')
 const pwLoading = ref(false)
-const progress = ref(0)
-
-const aborter = new AbortController()
-const initials = computed(() => (displayName.value || user.value?.email || 'U').slice(0, 2).toUpperCase())
+const profileUploadRef = ref<{
+  file: File | null
+  handleSave: () => Promise<void>
+} | null>(null)
 
 const signOut = () => {}
+
+const handleSave = async () => {
+  try {
+    const promises = []
+    if (displayName.value.trim() !== user.value?.name) {
+      const promise = $fetch('/api/user/name', {
+        method: 'POST',
+        body: {
+          newName: displayName.value
+        }
+      })
+      promises.push(promise)
+    }
+
+    if (profileUploadRef.value?.file) {
+      const promise = profileUploadRef.value.handleSave()
+      promises.push(promise)
+    }
+
+    await Promise.all(promises)
+
+    user.value!.name = displayName.value
+  } catch (error) {
+    console.error('Error saving profile:', error)
+    toast.add({
+      title: error instanceof Error ? error.message : 'Có lỗi xảy ra',
+      icon: 'lucide:octagon-alert',
+      color: 'error'
+    })
+  }
+}
 
 const handlePassword = async () => {
   if (newPassword.value.length < 6) {
@@ -213,71 +224,7 @@ const handlePassword = async () => {
   }
 }
 
-const authenticate = async () => {
-  const res = await $fetch('/api/auth/imagekit')
-  return res as {
-    signature: string
-    expire: number
-    token: string
-    publicKey: string
-  }
-}
-
-const handleSave = async () => {
-  if (!file.value) return toast.add({
-    title: 'ADD A IMAGE',
-    color: 'warning',
-    icon: 'lucide:triangle-alert'
-  })
-
-  let creds
-  try {
-    creds = await authenticate()
-  } catch (error) {
-    toast.add({
-      title: handleMessageError((error as Error).message) || 'Lỗi khi tải ảnh lên',
-      icon: 'lucide:triangle-alert',
-      color: 'error'
-    })
-  }
-
-  if (!creds) return toast.add({
-    title: 'Failed to get authentication credentials',
-    icon: 'lucide:octagon-x',
-    color: 'error'
-  })
-
-  try {
-    const resp = await upload({
-      publicKey: creds.publicKey,
-      signature: creds.signature,
-      expire: creds.expire,
-      token: creds.token,
-      file: file.value,
-      fileName: file.value.name,
-      folder: '/image',
-      onProgress: e => (progress.value = e.loaded / e.total * 100),
-      abortSignal: aborter.signal
-    })
-
-    toast.add({
-      title: resp.message || 'Đã hoàn thành upload ảnh!',
-      icon: 'lucide:circle-check',
-      color: 'success'
-    })
-  } catch (err) {
-    if (err instanceof ImageKitAbortError) console.warn('Aborted')
-    else if (err instanceof ImageKitInvalidRequestError) console.error('Bad request')
-    else if (err instanceof ImageKitUploadNetworkError) console.error('Network')
-    else if (err instanceof ImageKitServerError) console.error('Server side')
-    else console.error(err)
-  } finally {
-    progress.value = 0
-    file.value = null
-  }
-}
-
 onMounted(() => {
-  displayName.value = initials.value
+  displayName.value = user.value?.name || formatUserEmail(user.value!.email) || ''
 })
 </script>

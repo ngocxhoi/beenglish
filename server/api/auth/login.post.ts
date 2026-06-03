@@ -35,7 +35,9 @@ export default defineEventHandler(async (event) => {
 
     const token = await signToken({
       id: user.id,
-      email: user.email
+      email: user.email,
+      name: user.name,
+      profile: user.profile
     })
 
     setCookie(event, 'token', token, {
@@ -48,6 +50,8 @@ export default defineEventHandler(async (event) => {
     return {
       id: user.id,
       email: user.email,
+      name: user.name,
+      profile: user.profile,
       exp: Date.now() + 60 * 60 * 24 * 7
     }
   } catch (error) {

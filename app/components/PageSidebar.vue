@@ -63,9 +63,13 @@
         </p>
       </button>
       <div class="flex items-center gap-3 px-2 cursor-pointer">
-        <div class="w-9 h-9 rounded-full bg-foreground text-background grid place-items-center text-xs font-bold">
-          HN
-        </div>
+        <UAvatar
+          provider="imagekit"
+          :src="user?.profile"
+          :alt="user?.name || formatUserEmail(user!.email)"
+          size="2xl"
+          loading="lazy"
+        />
         <UDropdownMenu
           :items="items"
           :content="{
@@ -78,11 +82,11 @@
           }"
         >
           <div class="flex-1 min-w-0">
-            <p class="text-sm font-medium truncate">
-              Hội Ngọc
+            <p class="text-sm font-medium truncate capitalize">
+              {{ user?.name || formatUserEmail(user!.email) }}
             </p>
-            <p class="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-              Free tier
+            <p class="truncate font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+              {{ user?.email }}
             </p>
           </div>
         </UDropdownMenu>
@@ -95,6 +99,7 @@
 <script lang="ts" setup>
 import { groups } from '#shared/data'
 import type { DropdownMenuItem } from '@nuxt/ui'
+import { formatUserEmail } from '~~/shared/utils/format'
 
 const route = useRoute()
 const user = useAuth()

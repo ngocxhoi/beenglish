@@ -36,4 +36,8 @@ function handleMessageError(error: string) {
   return parts[1]?.trim() || error
 }
 
-export { fmt, norm, toSlug, compare, handleMessageError }
+function formatUserEmail(email: string) {
+  return email.split('@')[0]
+}
+
+export { fmt, norm, toSlug, compare, handleMessageError, formatUserEmail }

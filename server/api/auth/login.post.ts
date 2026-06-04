@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt'
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 
 import { db } from '~~/db'
-import { users } from '~~/db/schema'
+import { accounts, users } from '~~/db/schema'
 import { signToken } from '#server/utils/jwt'
 
 export default defineEventHandler(async (event) => {
@@ -14,19 +14,20 @@ export default defineEventHandler(async (event) => {
       .from(users)
       .where(eq(users.email, body.email))
 
-    if (!user) {
-      throw createError({
-        statusCode: 401,
-        message: 'Tài khoản hoặc mật khẩu của bạn là không đúng!'
+    const account
+      = await db.query.accounts.findFirst({
+        where: and(
+          eq(accounts.userId, user?.id || ''),
+          eq(accounts.provider, 'credentials')
+        )
       })
-    }
 
     const valid = await bcrypt.compare(
       body.password,
-      user.passwordHash || ''
+      account?.passwordHash || ''
     )
 
-    if (!valid) {
+    if (!user || !account || !valid) {
       throw createError({
         statusCode: 401,
         message: 'Tài khoản hoặc mật khẩu của bạn là không đúng!'
@@ -36,23 +37,23 @@ export default defineEventHandler(async (event) => {
     const token = await signToken({
       id: user.id,
       email: user.email,
-      name: user.name,
-      profile: user.profile
+      name: user.displayName,
+      profile: user.avatarUrl
     })
 
     setCookie(event, 'token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7
+      maxAge: 60 * 60 * 24 * 7 // 7 days
     })
 
     return {
       id: user.id,
       email: user.email,
-      name: user.name,
-      profile: user.profile,
-      exp: Date.now() + 60 * 60 * 24 * 7
+      name: user.displayName,
+      profile: user.avatarUrl,
+      exp: Date.now() + 60 * 60 * 24 * 7 // 7 days
     }
   } catch (error) {
     throw createError({

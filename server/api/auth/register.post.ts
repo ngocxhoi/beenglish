@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { eq } from 'drizzle-orm'
 
 import { db } from '~~/db'
-import { users } from '~~/db/schema'
+import { users, accounts, verificationTokens } from '~~/db/schema'
 
 const bodySchema = z.object({
   email: z.email(),
@@ -33,11 +33,34 @@ export default defineEventHandler(async (event) => {
       10
     )
 
-    await db.insert(users).values({
-      email: data.email,
-      name: data.email.split('@')[0],
+    const [user] = await db.insert(users).values({
+      email: data.email
+    }).returning()
+
+    if (!user) {
+      throw createError({
+        statusCode: 500,
+        message: 'Failed to create user'
+      })
+    }
+
+    await db.insert(accounts).values({
+      userId: user.id,
+      provider: 'credentials',
+      providerAccountId: data.email,
       passwordHash: hashedPassword
     })
+
+    const token = crypto.randomUUID()
+
+    await db.insert(verificationTokens).values({
+      email: data.email,
+      token,
+      type: 'verify_email',
+      expiresAt: new Date(Date.now() + 5 * 60 * 1000) // 5 minutes
+    })
+
+    await sendEmailVerify(data.email, token)
 
     return {
       success: true

@@ -9,5 +9,6 @@ export default defineEventHandler(async (event) => {
     return
   }
 
-  event.context.user = await verifyToken(token)
+  const user = await verifyToken(token)
+  event.context.user = user as unknown as UserType
 })

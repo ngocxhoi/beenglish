@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1780222648851,
-      "tag": "0000_peaceful_mephistopheles",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1780472985610,
-      "tag": "0001_many_reavers",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1780473199517,
-      "tag": "0002_daily_zuras",
+      "when": 1780569747408,
+      "tag": "0000_overrated_blockbuster",
       "breakpoints": true
     }
   ]

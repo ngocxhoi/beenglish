@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
 
   await db.update(users)
     .set({
-      name: newName
+      displayName: newName
     })
     .where(eq(users.id, user.id))
 

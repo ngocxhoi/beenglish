@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
 
   await db.update(users)
     .set({
-      profile: url
+      avatarUrl: url
     })
     .where(eq(users.id, user.id))
 

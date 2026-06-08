@@ -30,7 +30,7 @@ const file = ref<File | null>(null)
 const progress = ref(0)
 
 const toast = useToast()
-const user = useAuth()
+const { setProfile } = useGlobalStore()
 const aborter = new AbortController()
 
 const authenticate = async () => {
@@ -83,7 +83,7 @@ const handleSave = async () => {
       }
     })
 
-    user.value!.profile = resp.filePath
+    setProfile(resp.filePath || null)
 
     toast.add({
       title: resp.message || 'Đã hoàn thành upload ảnh!',

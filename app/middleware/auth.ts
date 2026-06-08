@@ -1,11 +1,11 @@
 export default defineNuxtRouteMiddleware(async (to) => {
-  const user = useAuth()
+  const { auth: user } = useGlobalStore()
 
   const requiresAuth = to.meta.auth === true
   const guestOnly = to.meta.guest === true
 
   // Trang cần đăng nhập
-  if (requiresAuth && !user.value) {
+  if (requiresAuth && !user) {
     return navigateTo({
       path: '/vi/auth/login',
       query: {
@@ -15,7 +15,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
 
   // Trang chỉ dành cho khách
-  if (guestOnly && user.value) {
+  if (guestOnly && user) {
     return navigateTo({
       path: to.query.redirect ? String(to.query.redirect) : '/vi/trang-chu'
     })

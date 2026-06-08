@@ -31,7 +31,7 @@
               <UTooltip text="Benjamin Canac">
                 <UAvatar
                   provider="imagekit"
-                  :src="user?.profile"
+                  :src="user?.profile || ''"
                   :alt="user?.name || formatUserEmail(user!.email)?.slice(0, 2)"
                   size="3xl"
                   loading="lazy"
@@ -148,7 +148,7 @@ definePageMeta({
 })
 
 const toast = useToast()
-const user = useAuth()
+const { auth: user, setName } = useGlobalStore()
 
 const displayName = ref('')
 const newPassword = ref('')
@@ -163,7 +163,7 @@ const signOut = () => {}
 const handleSave = async () => {
   try {
     const promises = []
-    if (displayName.value.trim() !== user.value?.name) {
+    if (displayName.value.trim() !== user?.name) {
       const promise = $fetch('/api/user/name', {
         method: 'POST',
         body: {
@@ -180,7 +180,7 @@ const handleSave = async () => {
 
     await Promise.all(promises)
 
-    user.value!.name = displayName.value
+    setName(displayName.value)
   } catch (error) {
     console.error('Error saving profile:', error)
     toast.add({
@@ -225,6 +225,6 @@ const handlePassword = async () => {
 }
 
 onMounted(() => {
-  displayName.value = user.value?.name || formatUserEmail(user.value!.email) || ''
+  displayName.value = user?.name || formatUserEmail(user?.email || '') || ''
 })
 </script>

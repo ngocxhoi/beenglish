@@ -11,7 +11,7 @@
         </div>
         <div class="w-full">
           <h1 class="font-display text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[0.95]">
-            Chào, Hội Ngọc.
+            Chào, {{ auth?.name || formatUserEmail(auth!.email) }}.
             <br>
             <span class="text-muted-foreground">Hôm nay học gì?</span>
           </h1>
@@ -63,4 +63,6 @@ definePageMeta({
   middleware: ['auth'],
   auth: true
 })
+
+const { auth } = useGlobalStore()
 </script>

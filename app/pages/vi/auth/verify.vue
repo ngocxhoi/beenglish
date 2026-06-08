@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const route = useRoute()
-const auth = useAuth()
+const { setAuth } = useGlobalStore()
 const token = route.query.token
 
 // Gọi API verify khi component mount
@@ -15,7 +15,7 @@ onMounted(async () => {
       method: 'POST',
       body: { token }
     })
-    auth.value = result
+    setAuth(result)
     // Verify thành công → redirect
     await navigateTo('/vi/trang-chu')
   } catch (error) {

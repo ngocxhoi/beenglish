@@ -90,7 +90,7 @@ const credential = reactive<Partial<SchemaLogin>>({
 const loading = ref(false)
 
 const toast = useToast()
-const user = useAuth()
+const { setAuth } = useGlobalStore()
 const route = useRoute()
 
 const handleSubmit = async (event: FormSubmitEvent<SchemaLogin>) => {
@@ -102,7 +102,7 @@ const handleSubmit = async (event: FormSubmitEvent<SchemaLogin>) => {
       body: event.data
     })
 
-    user.value = response
+    setAuth(response)
 
     toast.add({
       title: 'Đăng nhập thành công',

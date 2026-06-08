@@ -29,7 +29,7 @@
           >
             <div
               :class="[
-                'w-full aspect-square border grid place-items-center text-[11px] font-mono font-medium',
+                'w-full aspect-square border grid place-items-center text-xl font-mono font-medium',
                 day.today ? 'border-foreground bg-foreground text-background'
                 : day.done ? 'border-foreground bg-muted text-foreground'
                   : 'border-border text-muted-foreground'
@@ -67,7 +67,7 @@
       </div>
       <div>
         <p class="font-display text-3xl font-bold tracking-tighter leading-none">
-          0h7m
+          {{ data?.userStats?.totalPracticeMinutes }}
         </p>
         <p class="mt-2 font-mono text-xs uppercase tracking-wider opacity-60">
           tuần này
@@ -87,7 +87,7 @@
       </div>
       <div>
         <p class="font-display text-3xl font-bold tracking-tighter leading-none">
-          0
+          {{ data?.vocabularyCount }}
         </p>
         <p class="mt-2 font-mono text-xs uppercase tracking-wider opacity-60">
           từ vựng
@@ -214,4 +214,6 @@ const leaderboard: LeaderboardEntry[] = [
   { rank: 3, name: 'le phung', streak: 1, time: '11h 51m' },
   { rank: 4, name: 'Đạt Vũ', streak: 1, time: '11h 47m' }
 ]
+
+const { data } = await useFetch('/api/drizzle/dashboard')
 </script>

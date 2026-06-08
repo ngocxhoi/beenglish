@@ -2,7 +2,7 @@
   <div class="p-6 lg:p-10">
     <div class="relative xl:w-2/3 2xl:w-1/2 mx-auto aspect-video bg-foreground/95 text-background overflow-hidden border border-border">
       <iframe
-        src="https://www.youtube.com/embed/TL61VKkme14"
+        src="https://www.youtube.com/watch?v=Gct6PU-D5qw"
         class="w-full h-full"
         frameborder="0"
       />

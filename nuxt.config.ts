@@ -4,7 +4,8 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/ui',
     'nuxt-charts',
-    '@nuxt/image'
+    '@nuxt/image',
+    '@pinia/nuxt'
   ],
 
   devtools: {

@@ -65,7 +65,7 @@
       <div class="flex items-center gap-3 px-2 cursor-pointer">
         <UAvatar
           provider="imagekit"
-          :src="user?.profile"
+          :src="user?.profile || ''"
           :alt="user?.name || formatUserEmail(user!.email)"
           size="2xl"
           loading="lazy"
@@ -102,7 +102,7 @@ import type { DropdownMenuItem } from '@nuxt/ui'
 import { formatUserEmail } from '~~/shared/utils/format'
 
 const route = useRoute()
-const user = useAuth()
+const { auth: user, setAuth } = useGlobalStore()
 
 const items = ref<DropdownMenuItem[]>([
   {
@@ -130,7 +130,7 @@ const items = ref<DropdownMenuItem[]>([
 async function handleLogout(e: Event) {
   e.preventDefault()
   // TODO: implement logout
-  user.value = null
+  setAuth(null)
   await $fetch('/api/auth/logout', {
     method: 'POST'
   })

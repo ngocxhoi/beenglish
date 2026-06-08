@@ -1,14 +1,14 @@
 // plugins/auth.server.ts
 
 export default defineNuxtPlugin(async () => {
-  const user = useAuth()
+  const { setAuth } = useGlobalStore()
 
   const event = useRequestEvent()
 
   const userFromContext = event?.context.user
   if (userFromContext) {
-    user.value = userFromContext
+    setAuth(userFromContext)
   } else {
-    user.value = null
+    setAuth(null)
   }
 })

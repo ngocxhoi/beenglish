@@ -13,7 +13,7 @@
       </div>
       <div>
         <p class="font-display text-7xl font-bold tracking-tighter leading-none">
-          0
+          {{ data?.userStats?.currentStreak || 0 }}
         </p>
         <p class="mt-2 font-mono text-xs uppercase tracking-wider opacity-60">
           ngày liên tiếp
@@ -55,6 +55,7 @@
       </button>
     </div>
 
+    <!-- Time spent -->
     <div class="col-span-6 lg:col-span-4 p-5 border border-border">
       <div class="flex items-start justify-between">
         <span class="font-mono text-[10px] uppercase tracking-widest opacity-60">
@@ -67,7 +68,7 @@
       </div>
       <div>
         <p class="font-display text-3xl font-bold tracking-tighter leading-none">
-          {{ data?.userStats?.totalPracticeMinutes }}
+          {{ data?.userStats?.totalPracticeMinutes ?? 0 }}
         </p>
         <p class="mt-2 font-mono text-xs uppercase tracking-wider opacity-60">
           tuần này
@@ -75,6 +76,7 @@
       </div>
     </div>
 
+    <!-- Saved words -->
     <div class="col-span-6 lg:col-span-4 p-5 border border-border">
       <div class="flex items-start justify-between">
         <span class="font-mono text-[10px] uppercase tracking-widest opacity-60">
@@ -87,7 +89,7 @@
       </div>
       <div>
         <p class="font-display text-3xl font-bold tracking-tighter leading-none">
-          {{ data?.vocabularyCount }}
+          {{ data?.vocabularyCount ?? 0 }}
         </p>
         <p class="mt-2 font-mono text-xs uppercase tracking-wider opacity-60">
           từ vựng
@@ -95,6 +97,7 @@
       </div>
     </div>
 
+    <!-- XP -->
     <div class="col-span-6 lg:col-span-4 p-5 border border-border">
       <div class="flex items-start justify-between">
         <span class="font-mono text-[10px] uppercase tracking-widest opacity-60">
@@ -121,6 +124,7 @@
       </div>
     </div>
 
+    <!-- Leaderboard -->
     <div class="col-span-6 lg:col-span-4 row-span-2 border border-border p-6">
       <div class="flex items-baseline justify-between mb-4">
         <div>
@@ -149,7 +153,7 @@
               u?.you ? 'border-foreground bg-foreground text-background' : 'border-border'
             }`"
           >
-            {{ u?.name.slice(0, 1) }}
+            {{ u?.name?.slice(0, 1) }}
           </div>
           <div class="flex-1 min-w-0">
             <p class="text-sm font-medium truncate">
@@ -202,18 +206,41 @@
 </template>
 
 <script lang="ts" setup>
+const props = defineProps<{
+  data: DataDashboard | undefined
+}>()
+
 const weekDays = [
   { l: 'T2', done: true }, { l: 'T3', done: true }, { l: 'T4', done: false },
   { l: 'T5', done: false }, { l: 'T6', done: false }, { l: 'T7', done: false },
   { l: 'CN', today: true }
 ]
 
-const leaderboard: LeaderboardEntry[] = [
-  { rank: 1160, name: 'Bạn', time: '7m', you: true },
-  { rank: 2, name: 'Bảo Gia', streak: 14, time: '12h 38m' },
-  { rank: 3, name: 'le phung', streak: 1, time: '11h 51m' },
-  { rank: 4, name: 'Đạt Vũ', streak: 1, time: '11h 47m' }
-]
+const { auth } = useGlobalStore()
 
-const { data } = await useFetch('/api/drizzle/dashboard')
+const leaderboard = computed(() => {
+  const ranking = props.data?.ranking || []
+  const you = props.data?.userStats
+  const youInRank = ranking.find((r: unknown) => (r as { userId: string }).userId === auth?.id)
+
+  const board = ranking.map((r, i) => ({
+    rank: i,
+    name: r.userName,
+    streak: r.longestStreak,
+    time: formatTimeMinutes(r.totalPracticeMinutes),
+    you: r.userId === auth?.id
+  }))
+
+  if (!youInRank) {
+    board.unshift({
+      rank: 1160,
+      name: auth?.name || 'Bạn',
+      streak: you?.longestStreak || 0,
+      time: formatTimeMinutes(you?.totalPracticeMinutes || 0),
+      you: true
+    })
+  }
+
+  return board
+})
 </script>

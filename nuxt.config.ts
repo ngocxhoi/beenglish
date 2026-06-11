@@ -9,7 +9,7 @@ export default defineNuxtConfig({
   ],
 
   devtools: {
-    enabled: false
+    enabled: true
   },
 
   css: ['~/assets/css/main.css'],
@@ -20,6 +20,8 @@ export default defineNuxtConfig({
     JWT_SECRET: process.env.JWT_SECRET,
     IMAGEKIT_PRIVATE_KEY: process.env.IMAGEKIT_PRIVATE_KEY,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
+    DB_USER: process.env.DB_USER,
+    DB_PASSWORD: process.env.DB_PASSWORD,
     public: {
       IMAGEKIT_PUBLIC_KEY: process.env.IMAGEKIT_PUBLIC_KEY,
       IMAGEKIT_URL_ENDPOINT: process.env.IMAGEKIT_URL_ENDPOINT

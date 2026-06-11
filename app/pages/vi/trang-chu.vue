@@ -46,7 +46,7 @@
         </p>
       </section>
 
-      <DashboardBentoGrid />
+      <DashboardBentoGrid :data="data" />
 
       <DashboardLearningLesson />
 
@@ -65,4 +65,6 @@ definePageMeta({
 })
 
 const { auth } = useGlobalStore()
+
+const { data } = useFetch<DataDashboard>('/api/drizzle/dashboard')
 </script>

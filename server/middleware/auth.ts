@@ -1,6 +1,9 @@
 // server/middleware/auth.ts
 
 export default defineEventHandler(async (event) => {
+  const user = event.context.user
+  if (user) return
+
   const token = getCookie(event, 'token')
 
   if (!token) {
@@ -9,6 +12,6 @@ export default defineEventHandler(async (event) => {
     return
   }
 
-  const user = await verifyToken(token)
-  event.context.user = user as unknown as UserType
+  const userParsed = await verifyToken(token)
+  event.context.user = userParsed as unknown as UserType
 })

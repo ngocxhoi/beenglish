@@ -64,8 +64,7 @@
       </button>
       <div class="flex items-center gap-3 px-2 cursor-pointer">
         <UAvatar
-          provider="imagekit"
-          :src="user?.profile || ''"
+          src="https://cdn.jsdelivr.net/gh/faker-js/assets-person-portrait/male/512/46.jpg"
           :alt="user?.name || formatUserEmail(user!.email)"
           size="2xl"
           loading="lazy"

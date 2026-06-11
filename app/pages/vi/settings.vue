@@ -30,8 +30,7 @@
             <div class="flex items-center gap-4">
               <UTooltip text="Benjamin Canac">
                 <UAvatar
-                  provider="imagekit"
-                  :src="user?.profile || ''"
+                  src="https://cdn.jsdelivr.net/gh/faker-js/assets-person-portrait/male/512/46.jpg"
                   :alt="user?.name || formatUserEmail(user!.email)?.slice(0, 2)"
                   size="3xl"
                   loading="lazy"

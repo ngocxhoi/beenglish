@@ -48,7 +48,7 @@
 
       <DashboardBentoGrid :data="data" />
 
-      <DashboardLearningLesson />
+      <DashboardLearningLesson :data="data" />
 
       <footer class="pt-6 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
         <span class="font-mono uppercase tracking-wider">© {{ new Date().getFullYear() }} Senglish</span>

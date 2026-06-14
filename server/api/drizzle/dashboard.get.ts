@@ -1,6 +1,6 @@
-import { count, desc, eq } from 'drizzle-orm'
+import { count, desc, eq, and } from 'drizzle-orm'
 import { db } from '~~/db'
-import { users, vocabulary, userStats, videoProgress } from '~~/db/schema'
+import { users, vocabulary, userStats, videoProgress, videos } from '~~/db/schema'
 
 export default defineEventHandler(async (event) => {
   const user = event.context.user
@@ -42,7 +42,8 @@ export default defineEventHandler(async (event) => {
       db
         .select()
         .from(videoProgress)
-        .where(eq(videoProgress.userId, user.id))
+        .innerJoin(videos, eq(videoProgress.videoId, videos.id))
+        .where(and(eq(videoProgress.userId, user.id), eq(videoProgress.isCompleted, false)))
     ])
 
     return {

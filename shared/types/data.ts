@@ -1,6 +1,7 @@
 import type {
   userStats,
-  videoProgress
+  videoProgress,
+  videos
 } from '~~/db/schema'
 
 export type DataDashboard = {
@@ -13,7 +14,10 @@ export type DataDashboard = {
     userName: string
     avatar: string | null
   }[] | []
-  continueLesson: typeof videoProgress.$inferSelect[] | []
+  continueLesson: {
+    video_progress: typeof videoProgress.$inferSelect
+    videos: typeof videos.$inferSelect
+  }[] | []
   userName: string
   avatar: string | null
 }

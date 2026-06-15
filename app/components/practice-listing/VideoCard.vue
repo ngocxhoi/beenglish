@@ -1,17 +1,19 @@
 <template>
-  <article class="group border border-border hover:border-foreground transition cursor-pointer">
+  <article class="group border border-border hover:border-foreground transition">
     <div class="aspect-video bg-muted relative border-b border-border overflow-hidden">
       <div
-        class="absolute inset-0 opacity-50"
+        class="absolute inset-0 group-hover:opacity-50 transition-all duration-500"
         :style="{
-          backgroundImage: `repeating-linear-gradient(45deg, transparent 0 8px, currentColor 8px 9px)`,
+          backgroundImage: v.videoUrl ? `url(${v.videoUrl})` : 'repeating-linear-gradient(45deg, transparent 0 8px, currentColor 8px 9px)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           color: 'var(--color-border)'
         }"
       />
-      <div class="absolute inset-0 grid place-items-center">
+      <div class="absolute inset-0 grid place-items-center transition-all duration-500 scale-125 opacity-0 group-hover:opacity-100 group-hover:scale-100">
         <NuxtLink
           :to="`/vi/dictation/${toSlug(v.title)}`"
-          class="w-12 h-12 border border-foreground bg-background grid place-items-center group-hover:bg-foreground group-hover:text-background transition"
+          class="w-12 h-12 rounded-full cursor-pointer border border-foreground bg-background grid place-items-center group-hover:bg-foreground group-hover:text-background transition"
         >
           <Icon
             name="lucide:play"
@@ -22,10 +24,10 @@
       <span class="absolute top-2 left-2 font-mono text-[10px] font-bold px-1.5 py-0.5 bg-foreground text-background">
         {{ v.level }}
       </span>
-      <span class="absolute bottom-2 right-2 font-mono text-[10px] px-1.5 py-0.5 bg-background border border-border flex items-center gap-1">
+      <span class="absolute bottom-2 right-2 font-mono text-base px-1.5 py-0.5 bg-background border border-border flex items-center gap-1">
         <Icon
           name="lucide:clock"
-          class="w-3 h-3"
+          class="w-4 h-4"
         /> {{ v.minutes }}m
       </span>
     </div>

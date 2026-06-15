@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section v-if="lessons.dictationLesson">
     <div class="flex items-baseline justify-between mb-5 pb-3 border-b border-foreground">
       <div class="flex items-baseline gap-3">
         <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">№.002</span>
@@ -57,7 +57,7 @@
     </div>
   </section>
 
-  <section>
+  <section v-if="lessons.shadowLesson">
     <div class="flex items-baseline justify-between mb-5 pb-3 border-b border-foreground">
       <div class="flex items-baseline gap-3">
         <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">№.003</span>

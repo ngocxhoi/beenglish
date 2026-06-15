@@ -20,7 +20,7 @@
           </span>
           <span class="flex-1 h-px bg-border" />
           <span class="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-            {{ videos.length }} video
+            {{ videos?.length ?? 0 }} video
           </span>
         </div>
 
@@ -68,7 +68,7 @@
           </span>
           <div class="flex flex-wrap gap-1.5">
             <button
-              v-for="t in ['ALL', ...topics]"
+              v-for="t in ['ALL', ...TOPICS]"
               :key="t"
               :class="['h-7 px-2.5 text-[11px] font-medium uppercase tracking-wider border transition-colors',
                        topic === t
@@ -131,24 +131,24 @@
 </template>
 
 <script lang="ts" setup>
+import { LEVELS, TOPICS } from '#shared/data'
+
 const props = defineProps<{
   mode: 'dictation' | 'shadowing'
   tagline: string
   description: string
-  topics: string[]
-  videos: Video[]
+  videos?: Video[]
 }>()
-
-const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1']
 
 const level = ref<string>('ALL')
 const topic = ref<string>('ALL')
 const query = ref<string>('')
 
 const filtered = computed(() => {
+  if (!props.videos?.length) return []
   return props.videos.filter(v =>
     (level.value === 'ALL' || v.level === level.value)
-    && (topic.value === 'ALL' || v.topic === topic.value)
+    && (topic.value === 'ALL' || v.topic.toLocaleLowerCase() === topic.value.toLocaleLowerCase())
     && (query.value.trim() === '' || v.title.toLowerCase().includes(query.value.toLowerCase()))
   )
 })

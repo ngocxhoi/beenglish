@@ -28,6 +28,20 @@ export type Video = {
   topic: string
   minutes: number
   progress?: number
+  isCompleted?: boolean
+  videoUrl?: string
+}
+
+export type VideoResult = {
+  id: string
+  title: string
+  level: 'A1' | 'A2' | 'B1' | 'B2' | 'C1'
+  topic: string
+  durationSeconds: number
+  completedSentences?: number
+  totalSentences?: number
+  isCompleted?: boolean
+  videoUrl?: string
 }
 
 export type Sentence = {
